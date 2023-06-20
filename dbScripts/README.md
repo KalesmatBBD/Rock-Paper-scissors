@@ -1,27 +1,23 @@
 All DB Scripts and Diagrams comes here
 
-CREATE DATABASE RockPaperScissors;
+CREATE DATABASE IF NOT EXISTS RockPaperScissors;
 USE RockPaperScissors;
 
-CREATE TABLE Players (
-  id INT PRIMARY KEY IDENTITY,
-  username VARCHAR(50) UNIQUE,
-  password VARCHAR(50),
+CREATE TABLE IF NOT EXISTS Players (
+  username varchar(50) PRIMARY KEY,
+  email varchar(50),
+  password varchar(50) NOT NULL
 );
 
-CREATE TABLE Games (
-  id INT PRIMARY KEY IDENTITY,
-  player_id INT,
-  timestamp DATETIME,
-  FOREIGN KEY (player_id) REFERENCES Players(id)
-);
+CREATE TABLE IF NOT EXISTS Score (
+  username varchar(50),
+  score int DEFAULT 0,
+  achievedOn timestamp DEFAULT CURRENT_TIMESTAMP,
 
-CREATE TABLE Rounds (
-  id INT PRIMARY KEY IDENTITY,
-  game_id INT,
-  player_choice VARCHAR(50),
-  computer_choice VARCHAR(50),
-  result VARCHAR(50),
-  timestamp DATETIME,
-  FOREIGN KEY (game_id) REFERENCES Games(id)
+  CONSTRAINT fk_user_email
+    FOREIGN KEY (user_email)
+    REFERENCES Players(username),
+
+  CONSTRAINT uq_score_user_email
+    UNIQUE (username)
 );
