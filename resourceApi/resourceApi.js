@@ -20,7 +20,7 @@ app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.json());
 
-app.use('/web', express.static(path.join('web')));
+app.use('/', express.static(path.join('web')));
 
 app.use('/login', loginRouter);
 app.use('/player', playerRouter);

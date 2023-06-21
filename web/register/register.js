@@ -10,8 +10,6 @@ window.onload=function() {
 const createInput = (id, type, name, placeholder) => {
     const section = document.createElement('section');
     section.classList.add('form-field')
-    // section.classList.add('success')
-
     
     const input = document.createElement("input");
     input.setAttribute('id', id)
@@ -26,29 +24,26 @@ const createInput = (id, type, name, placeholder) => {
     return section;
 }
 
-const createForm = () => {
-    const article = document.getElementById("card");
-    const form = document.createElement('form')
-    form.classList.add('login__form-container')
-    form.id = 'loginForm'
-    article.appendChild(form);
+const submitSignIn = (registration) => {
+    fetch('http://localhost:4040/register', {
+        method: 'POST',
+        mode: "cors",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(registration)
+    })
+    .then(response => response.json())
+    .then(data => {
+        window.location.href = '/';
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
 
-    const username = createInput('username', 'text', 'Username', 'Username');
-    form.appendChild(username)
-
-    const email = createInput('email', 'email', 'Email', 'Email');
-    form.appendChild(email)
-
-    const password = createInput('password', 'password', 'Password', 'Password');
-    form.appendChild(password)
-
-    const verifyPassword = createInput('verifyPassword', 'password', 'verifyPassword', 'Verify password');
-    form.appendChild(verifyPassword)
-
-    const button = document.createElement('button');
-    button.classList.add('signIn');
-    button.setAttribute('type', 'button');
-    button.innerText = 'SIGN IN';
+const submitButtonEventListener = (button) => {
     button.addEventListener('click', (e) => {
         let isUsernameValid = checkUsername(),
             isEmailValid = checkEmail(),
@@ -64,16 +59,26 @@ const createForm = () => {
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
             const verifyPassword = document.getElementById("verifyPassword").value;
-            console.log(username);
-            console.log(email);
-
-        }
+            submitSignIn({username, email, password, verifyPassword})
+        };
     })
-    form.appendChild(button)
-    usernameEl = document.querySelector('#username');
-    emailEl = document.querySelector('#email');
-    passwordEl = document.querySelector('#password');
-    confirmPasswordEl = document.querySelector('#verifyPassword');
+}
+
+const cancelButtonEventListener = (button) => {
+    button.addEventListener('click', (e) => {
+        window.location.href = '/';
+    })
+}
+
+const createButton = (text, className) => {
+    const button = document.createElement('button');
+    button.classList.add(className);
+    button.setAttribute('type', 'button');
+    button.innerText = text;
+    return button
+}
+
+const fromInputEventListener = (form) => {
     form.addEventListener('input', debounce(function (e) {
         switch (e.target.id) {
             case 'username':
@@ -89,48 +94,95 @@ const createForm = () => {
                 checkConfirmPassword();
                 break;
         }
-    }));    
+    }));
+}
+
+const createForm = () => {
+    const article = document.getElementById("card");
+    const form = document.createElement('form')
+    form.classList.add('registern__form-container')
+    form.id = 'registerForm'
+    article.appendChild(form);
+
+    const username = createInput('username', 'text', 'Username', 'Username');
+    form.appendChild(username)
+
+    const email = createInput('email', 'email', 'Email', 'Email');
+    form.appendChild(email)
+
+    const password = createInput('password', 'password', 'Password', 'Password');
+    form.appendChild(password)
+
+    const verifyPassword = createInput('verifyPassword', 'password', 'verifyPassword', 'Verify password');
+    form.appendChild(verifyPassword)
+
+    const signInButton = createButton('SIGN IN', 'signIn');
+    submitButtonEventListener(signInButton);
+    form.appendChild(signInButton);
+    
+    const cancelButton = createButton('CANCEL', 'cancel');
+    cancelButtonEventListener(cancelButton);
+    form.appendChild(cancelButton);
+
+    usernameEl = document.querySelector('#username');
+    emailEl = document.querySelector('#email');
+    passwordEl = document.querySelector('#password');
+    confirmPasswordEl = document.querySelector('#verifyPassword');
+    
+    fromInputEventListener(form);
 }
 
 const showError = (input, message) => {
-    // get the form-field element
     const formField = input.parentElement;
-    // add the error class
     formField.classList.remove('success');
     formField.classList.add('error');
-
-    // show the error message
     const error = formField.querySelector('small');
     error.textContent = message;
 };
 
 const showSuccess = (input) => {
-    // get the form-field element
     const formField = input.parentElement;
-
-    // remove the error class
     formField.classList.remove('error');
     formField.classList.add('success');
-
-    // hide the error message
     const error = formField.querySelector('small');
     error.textContent = '';
 }
 
+const isUsernameValid = (username) => {
+    const re = new RegExp(`^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])`);
+    return re.test(username);
+}
+
+const isEmailValid = (email) => {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+};
+
+const isPasswordSecure = (password) => {
+    const re = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+    return re.test(password);
+};
+
+const isRequired = value => value === '' ? false : true;
+
+const isBetween = (length, min, max) => length < min || length > max ? false : true;
+
 const checkUsername = () => {
-
     let valid = false;
-
-    const min = 3,
-        max = 25;
-
+    const min = 5,
+        max = 20;
     const username = usernameEl.value.trim();
 
     if (!isRequired(username)) {
         showError(usernameEl, 'Username cannot be blank.');
-    } else if (!isBetween(username.length, min, max)) {
+    }
+    else if (!isUsernameValid(username)) {
+        showError(usernameEl, `Username must contain a-z A-Z or 0-9 characters.`)
+    }
+    else if (!isBetween(username.length, min, max)) {
         showError(usernameEl, `Username must be between ${min} and ${max} characters.`)
-    } else {
+    }
+    else {
         showSuccess(usernameEl);
         valid = true;
     }
@@ -153,62 +205,43 @@ const checkEmail = () => {
 
 const checkPassword = () => {
     let valid = false;
-
-
     const password = passwordEl.value.trim();
-
     if (!isRequired(password)) {
         showError(passwordEl, 'Password cannot be blank.');
-    } else if (!isPasswordSecure(password)) {
+    }
+    else if (!isPasswordSecure(password)) {
         showError(passwordEl, 'Password must has at least 8 characters that include at least 1 lowercase character, 1 uppercase characters, 1 number, and 1 special character in (!@#$%^&*)');
-    } else {
+    }
+    else {
         showSuccess(passwordEl);
         valid = true;
     }
-
     return valid;
 };
 
 const checkConfirmPassword = () => {
     let valid = false;
-    // check confirm password
     const confirmPassword = confirmPasswordEl.value.trim();
     const password = passwordEl.value.trim();
-
     if (!isRequired(confirmPassword)) {
         showError(confirmPasswordEl, 'Please enter the password again');
-    } else if (password !== confirmPassword) {
+    }
+    else if (password !== confirmPassword) {
         showError(confirmPasswordEl, 'The password does not match');
-    } else {
+    }
+    else {
         showSuccess(confirmPasswordEl);
         valid = true;
     }
-
     return valid;
 };
-
-const isEmailValid = (email) => {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-};
-
-const isPasswordSecure = (password) => {
-    const re = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-    return re.test(password);
-};
-
-const isRequired = value => value === '' ? false : true;
-const isBetween = (length, min, max) => length < min || length > max ? false : true;
-
 
 const debounce = (fn, delay = 500) => {
     let timeoutId;
     return (...args) => {
-        // cancel the previous timer
         if (timeoutId) {
             clearTimeout(timeoutId);
         }
-        // setup a new timer
         timeoutId = setTimeout(() => {
             fn.apply(null, args)
         }, delay);
