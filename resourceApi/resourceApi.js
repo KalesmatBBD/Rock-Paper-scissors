@@ -22,10 +22,10 @@ app.use(express.json());
 
 app.use('/', express.static(path.join('web')));
 
-app.use('/login', loginRouter);
-app.use('/player', playerRouter);
-app.use('/register', registerRouter);
-app.use('/scores', scoresRouter);
+app.use('/api/login', loginRouter);
+app.use('/api/player', playerRouter);
+app.use('/api/register', registerRouter);
+app.use('/api/scores', scoresRouter);
 
 app.listen(port, '0.0.0.0', () => {
   console.log(`http://localhost:${port}`);
