@@ -33,9 +33,9 @@ const submitSignIn = (registration) => {
         body: JSON.stringify(registration)
     })
     .then(response => {
-        console.log(response.status);
+        console.log(response);
         if (response.status === 200) {
-            window.location.href = '/';
+            // window.location.href = '/';
         }
     });
 }

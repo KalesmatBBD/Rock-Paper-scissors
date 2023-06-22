@@ -1,10 +1,10 @@
 const {
     passwordService
-} = require('../shared/services/password.service');
+} = require('../shared/services');
 
 module.exports.registerService = {
-    registerPlayer: (playerDetails) => {
-        const {username, email, password} = playerDetails;
+    registerUser: (userDetails) => {
+        const {username, email, password} = userDetails;
         const hashedPassword = passwordService.encryptPassword(password);
         return Promise.resolve();
     }

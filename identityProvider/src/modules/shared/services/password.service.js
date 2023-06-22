@@ -3,7 +3,6 @@ const config = require('config');
 
 const secret = config.identityProvider.secret;
 
-
 module.exports.passwordService = {
   encryptPassword: (password) => {
     return crypto

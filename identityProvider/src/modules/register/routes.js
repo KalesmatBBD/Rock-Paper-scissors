@@ -8,7 +8,7 @@ const {
 
 registerRouter.post('', validateBody, (req, res) => {
   console.log(req.body);
-  return registerService.registerPlayer(req.body)
+  return registerService.registerUser(req.body)
     .then(() => {
       res.status(200).json({registered: true});
     })

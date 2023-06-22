@@ -35,7 +35,6 @@ const submitSignIn = (registration) => {
         body: JSON.stringify(registration)
     })
     .then(response => {
-        console.log(response.status);
         if (response.status === 200) {
             window.location.href = '/login';
         }
