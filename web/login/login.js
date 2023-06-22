@@ -1,7 +1,5 @@
 let usernameEl;
-let emailEl;
 let passwordEl;
-let confirmPasswordEl;
 
 window.onload=function() {
     createForm()
@@ -25,7 +23,7 @@ const createInput = (id, type, name, placeholder) => {
 }
 
 const submitSignIn = (registration) => {
-    fetch('http://localhost:8080/register', {
+    fetch('http://localhost:8080/login', {
         method: 'POST',
         mode: "cors",
         headers: {
@@ -37,7 +35,7 @@ const submitSignIn = (registration) => {
     .then(response => {
         console.log(response.status);
         if (response.status === 200) {
-            window.location.href = '/login';
+            window.location.href = '/';
         }
     });
 }
@@ -45,20 +43,14 @@ const submitSignIn = (registration) => {
 const submitButtonEventListener = (button) => {
     button.addEventListener('click', (e) => {
         let isUsernameValid = checkUsername(),
-            isEmailValid = checkEmail(),
-            isPasswordValid = checkPassword(),
-            isConfirmPasswordValid = checkConfirmPassword();
+            isPasswordValid = checkPassword();
 
         let isFormValid = isUsernameValid &&
-            isEmailValid &&
-            isPasswordValid &&
-            isConfirmPasswordValid;
+            isPasswordValid;
         if (isFormValid) {
             const username = document.getElementById("username").value;
-            const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
-            const verifyPassword = document.getElementById("verifyPassword").value;
-            submitSignIn({username, email, password, verifyPassword})
+            submitSignIn({username, password})
         };
     })
 }
@@ -83,14 +75,8 @@ const fromInputEventListener = (form) => {
             case 'username':
                 checkUsername();
                 break;
-            case 'email':
-                checkEmail();
-                break;
             case 'password':
                 checkPassword();
-                break;
-            case 'verifyPassword':
-                checkConfirmPassword();
                 break;
         }
     }));
@@ -105,16 +91,10 @@ const createForm = () => {
     const username = createInput('username', 'text', 'Username', 'Username');
     form.appendChild(username)
 
-    const email = createInput('email', 'email', 'Email', 'Email');
-    form.appendChild(email)
-
     const password = createInput('password', 'password', 'Password', 'Password');
     form.appendChild(password)
 
-    const verifyPassword = createInput('verifyPassword', 'password', 'verifyPassword', 'Verify password');
-    form.appendChild(verifyPassword)
-
-    const signInButton = createButton('SIGN UP', 'register');
+    const signInButton = createButton('SIGN IN', 'signIn');
     submitButtonEventListener(signInButton);
     form.appendChild(signInButton);
     
@@ -123,9 +103,7 @@ const createForm = () => {
     form.appendChild(cancelButton);
 
     usernameEl = document.querySelector('#username');
-    emailEl = document.querySelector('#email');
     passwordEl = document.querySelector('#password');
-    confirmPasswordEl = document.querySelector('#verifyPassword');
     
     fromInputEventListener(form);
 }
@@ -150,11 +128,6 @@ const isUsernameValid = (username) => {
     const re = new RegExp(`^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])`);
     return re.test(username);
 }
-
-const isEmailValid = (email) => {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(email);
-};
 
 const isPasswordSecure = (password) => {
     const re = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
@@ -187,20 +160,6 @@ const checkUsername = () => {
     return valid;
 };
 
-const checkEmail = () => {
-    let valid = false;
-    const email = emailEl.value.trim();
-    if (!isRequired(email)) {
-        showError(emailEl, 'Email cannot be blank.');
-    } else if (!isEmailValid(email)) {
-        showError(emailEl, 'Email is not valid.')
-    } else {
-        showSuccess(emailEl);
-        valid = true;
-    }
-    return valid;
-};
-
 const checkPassword = () => {
     let valid = false;
     const password = passwordEl.value.trim();
@@ -212,23 +171,6 @@ const checkPassword = () => {
     }
     else {
         showSuccess(passwordEl);
-        valid = true;
-    }
-    return valid;
-};
-
-const checkConfirmPassword = () => {
-    let valid = false;
-    const confirmPassword = confirmPasswordEl.value.trim();
-    const password = passwordEl.value.trim();
-    if (!isRequired(confirmPassword)) {
-        showError(confirmPasswordEl, 'Please enter the password again');
-    }
-    else if (password !== confirmPassword) {
-        showError(confirmPasswordEl, 'The password does not match');
-    }
-    else {
-        showSuccess(confirmPasswordEl);
         valid = true;
     }
     return valid;
