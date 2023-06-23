@@ -53,3 +53,9 @@ img {
   display: block;
   margin: 0 auto;
 }
+
+.timer {
+  font-size: 24px;
+  text-align: center;
+  margin-top: 20px;
+}
