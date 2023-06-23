@@ -59,10 +59,21 @@ small {
 }
 button {
     text-align: center;
-    font-size: 20px
+    font-size: 20px;
+    margin-bottom: 5px;
+
 }
 
 .cancel {
     margin-left: 12px;
 }
 
+.register {
+    margin-top: 5px;
+}
+
+.error {
+    text-align: center;
+    font-size: 20px;
+    color: red;
+}

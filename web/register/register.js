@@ -24,7 +24,13 @@ const createInput = (id, type, name, placeholder) => {
     return section;
 }
 
+const responseErrorMessage = (message, article) => {
+    article.textContent = message
+}
+
 const submitSignIn = (registration) => {
+    const error = document.getElementById('error');
+    responseErrorMessage('', error)
     fetch('http://localhost:8080/register', {
         method: 'POST',
         mode: "cors",
@@ -35,9 +41,16 @@ const submitSignIn = (registration) => {
         body: JSON.stringify(registration)
     })
     .then(response => {
-        if (response.status === 200) {
-            window.location.href = '/login';
-        }
+        const data = response.json();
+        data.then(res => {
+            if (response.status === 200) {
+                // window.location.href = '/login';
+                responseErrorMessage('', error)
+            } else {
+                responseErrorMessage(res.message, error)
+            }
+
+        })
     });
 }
 
@@ -95,6 +108,8 @@ const fromInputEventListener = (form) => {
     }));
 }
 
+
+
 const createForm = () => {
     const article = document.getElementById("card");
     const form = document.createElement('form')
@@ -120,6 +135,12 @@ const createForm = () => {
     const cancelButton = createButton('CANCEL', 'cancel');
     cancelButtonEventListener(cancelButton);
     form.appendChild(cancelButton);
+
+    const error = document.createElement('article');
+    error.classList.add('error');
+    error.id = 'error'
+
+    form.appendChild(error);
 
     usernameEl = document.querySelector('#username');
     emailEl = document.querySelector('#email');
