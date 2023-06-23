@@ -14,14 +14,14 @@ h1 {
     font-size: 40px
 }
 
-.register__container {
+.login__container {
     display: -webkit-flex;
     display: flex;
     flex-direction: column;
     padding-top: 50px;
 }
 
-.register__card {
+.login__card {
     padding: 40px;
     border-radius: 10px;
     border: 1px solid;
@@ -29,6 +29,7 @@ h1 {
     margin-right: auto;
     background-color: white;
 }
+
 
 .form__input {
     width: 200px;
@@ -64,3 +65,4 @@ button {
 .cancel {
     margin-left: 12px;
 }
+
