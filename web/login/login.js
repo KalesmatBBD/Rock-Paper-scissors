@@ -33,8 +33,10 @@ const submitSignIn = (registration) => {
         body: JSON.stringify(registration)
     })
     .then(response => {
-        console.log(response);
+        console.log(response.headers.get('Authorization'));
+        console.log(response.headers.get('RefreshToken'));
         if (response.status === 200) {
+            // Call the api and send the access token 
             // window.location.href = '/';
         }
     });

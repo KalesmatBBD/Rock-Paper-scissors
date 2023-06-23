@@ -10,8 +10,9 @@ const {
 loginRouter.post('', validateBody, (req, res) => {
   return loginService.loginUser(req.body)
     .then(({accessToken, refreshToken}) => {
-      res.header.accessToken = accessToken;
-      res.header.refreshToken = refreshToken;
+      res.set('Authorization', 'Bearer '+ accessToken)
+      res.set('RefreshToken', refreshToken)
+      res.header("Access-Control-Expose-Headers","Authorization");
       res.status(200).json({})
     })
 });
