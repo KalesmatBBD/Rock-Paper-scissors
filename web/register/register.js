@@ -25,7 +25,7 @@ const createInput = (id, type, name, placeholder) => {
 }
 
 const submitSignIn = (registration) => {
-    fetch('http://localhost:4040/register', {
+    fetch('http://localhost:8080/register', {
         method: 'POST',
         mode: "cors",
         headers: {
@@ -34,12 +34,11 @@ const submitSignIn = (registration) => {
         },
         body: JSON.stringify(registration)
     })
-    .then(response => response.json())
-    .then(data => {
-        window.location.href = '/';
-    })
-    .catch((error) => {
-        console.error('Error:', error);
+    .then(response => {
+        console.log(response.status);
+        if (response.status === 200) {
+            window.location.href = '/login';
+        }
     });
 }
 
@@ -116,7 +115,7 @@ const createForm = () => {
     const verifyPassword = createInput('verifyPassword', 'password', 'verifyPassword', 'Verify password');
     form.appendChild(verifyPassword)
 
-    const signInButton = createButton('SIGN IN', 'signIn');
+    const signInButton = createButton('SIGN UP', 'register');
     submitButtonEventListener(signInButton);
     form.appendChild(signInButton);
     
