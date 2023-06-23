@@ -1,0 +1,23 @@
+{
+  "identityProvider" : {
+    "port": 8080,
+    "dbConfig" : {
+      "dbUser": "primaryuser",
+      "dbPassword": "rockPaperScissors",
+      "dbName": "IdentityProviderDB",
+      "server": "rockpaperscissors.cnhrl5wk3uki.af-south-1.rds.amazonaws.com"
+    },
+    "secret": "BBD_GRAD_SECRET_STRING",
+    "key": "certs/identity.key"
+  },
+  "resourceApi" : {
+    "port": 4040,
+    "dbConfig" : {
+      "dbUser": "primaryuser",
+      "dbPassword": "rockPaperScissors",
+      "dbName": "",
+      "server": "rockpaperscissors.cnhrl5wk3uki.af-south-1.rds.amazonaws.com"
+    },
+    "key": "certs/api.key"
+  }
+}

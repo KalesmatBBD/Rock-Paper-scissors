@@ -1,4 +1,4 @@
-let usernameEl;
+let emailEl;
 let passwordEl;
 
 window.onload=function() {
@@ -22,7 +22,17 @@ const createInput = (id, type, name, placeholder) => {
     return section;
 }
 
+const responseErrorMessage = (message, article) => {
+    article.textContent = message
+}
+
+const toggleRegisterButton = () => {
+    const section = document.getElementById('register')
+    section.hidden = !section.hidden
+}
+
 const submitSignIn = (registration) => {
+    const error = document.getElementById('error');
     fetch('http://localhost:8080/login', {
         method: 'POST',
         mode: "cors",
@@ -33,26 +43,37 @@ const submitSignIn = (registration) => {
         body: JSON.stringify(registration)
     })
     .then(response => {
-        console.log(response.headers.get('Authorization'));
-        console.log(response.headers.get('RefreshToken'));
-        if (response.status === 200) {
-            // Call the api and send the access token 
-            // window.location.href = '/';
-        }
+        const data = response.json();
+        data.then(res => {
+            if (response.status === 200) {
+                sessionStorage.setItem("Authorization", response.headers.get('Authorization').split(' ')[1]);
+                window.location.href = '/';
+                responseErrorMessage('', error)
+
+            }
+            else if (response.status === 404) {
+                responseErrorMessage(res.message, error)
+                toggleRegisterButton()
+            } 
+            else {
+                responseErrorMessage(res.message, error)
+            }
+
+        })
     });
 }
 
 const submitButtonEventListener = (button) => {
     button.addEventListener('click', (e) => {
-        let isUsernameValid = checkUsername(),
+        let isEmailValid = checkEmail(),
             isPasswordValid = checkPassword();
 
-        let isFormValid = isUsernameValid &&
+        let isFormValid = isEmailValid &&
             isPasswordValid;
         if (isFormValid) {
-            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
-            submitSignIn({username, password})
+            submitSignIn({email, password})
         };
     })
 }
@@ -60,6 +81,13 @@ const submitButtonEventListener = (button) => {
 const cancelButtonEventListener = (button) => {
     button.addEventListener('click', (e) => {
         window.location.href = '/';
+    })
+}
+
+const registerButtonEventListener = (button) => {
+    button.addEventListener('click', (e) => {
+        console.log('yaya');
+        window.location.href = '/register';
     })
 }
 
@@ -74,8 +102,8 @@ const createButton = (text, className) => {
 const fromInputEventListener = (form) => {
     form.addEventListener('input', debounce(function (e) {
         switch (e.target.id) {
-            case 'username':
-                checkUsername();
+            case 'email':
+                checkEmail();
                 break;
             case 'password':
                 checkPassword();
@@ -90,8 +118,8 @@ const createForm = () => {
     form.id = 'registerForm'
     article.appendChild(form);
 
-    const username = createInput('username', 'text', 'Username', 'Username');
-    form.appendChild(username)
+    const email = createInput('email', 'email', 'Email', 'Email');
+    form.appendChild(email)
 
     const password = createInput('password', 'password', 'Password', 'Password');
     form.appendChild(password)
@@ -104,10 +132,23 @@ const createForm = () => {
     cancelButtonEventListener(cancelButton);
     form.appendChild(cancelButton);
 
-    usernameEl = document.querySelector('#username');
+    const error = document.createElement('article');
+    error.classList.add('error');
+    error.id = 'error'
+    form.appendChild(error);
+
+    const registerButton = createButton('Register', 'register');
+    const section = document.createElement('section');
+    section.id = 'register'
+    registerButtonEventListener(registerButton);
+    section.appendChild(registerButton);
+    form.appendChild(section);
+    
+    emailEl = document.querySelector('#email');
     passwordEl = document.querySelector('#password');
     
     fromInputEventListener(form);
+    toggleRegisterButton()
 }
 
 const showError = (input, message) => {
@@ -126,10 +167,10 @@ const showSuccess = (input) => {
     error.textContent = '';
 }
 
-const isUsernameValid = (username) => {
-    const re = new RegExp(`^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])`);
-    return re.test(username);
-}
+const isEmailValid = (email) => {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+};
 
 const isPasswordSecure = (password) => {
     const re = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
@@ -140,23 +181,15 @@ const isRequired = value => value === '' ? false : true;
 
 const isBetween = (length, min, max) => length < min || length > max ? false : true;
 
-const checkUsername = () => {
+const checkEmail = () => {
     let valid = false;
-    const min = 5,
-        max = 20;
-    const username = usernameEl.value.trim();
-
-    if (!isRequired(username)) {
-        showError(usernameEl, 'Username cannot be blank.');
-    }
-    else if (!isUsernameValid(username)) {
-        showError(usernameEl, `Username must contain a-z A-Z or 0-9 characters.`)
-    }
-    else if (!isBetween(username.length, min, max)) {
-        showError(usernameEl, `Username must be between ${min} and ${max} characters.`)
-    }
-    else {
-        showSuccess(usernameEl);
+    const email = emailEl.value.trim();
+    if (!isRequired(email)) {
+        showError(emailEl, 'Email cannot be blank.');
+    } else if (!isEmailValid(email)) {
+        showError(emailEl, 'Email is not valid.')
+    } else {
+        showSuccess(emailEl);
         valid = true;
     }
     return valid;

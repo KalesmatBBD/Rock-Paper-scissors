@@ -12,8 +12,11 @@ registerRouter.post('', validateBody, (req, res) => {
     .then(() => {
       res.status(200).json({registered: true});
     })
-    .catch(() => {
-      return res.status(500).json({error: ''});
+    .catch((error) => {
+      if(error.code && error.code === 409) {
+        return res.status(409).json({message: error.message});
+      }
+      return res.status(500).json({message: 'Internal error'});
     })
 });
 

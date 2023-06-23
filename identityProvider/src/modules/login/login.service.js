@@ -3,19 +3,30 @@ const {
     tokenService
 } = require('../shared/services');
 
+const {
+  fetchUser
+} = require('../../database/identityProviderDAL');
+
 module.exports.loginService = {
   loginUser: (userDetails) => {
     const threeMin = '180';
     const tenMin = '600';
-    const {username, email, password} = userDetails;
-    // Get hashed password from database
+    const {email, password} = userDetails;
     const hashedPassword = passwordService.encryptPassword(password);
-    if (!passwordService.verifyPassWord(password, hashedPassword)) {
-        return Promise.reject()
-    }
-    const accessToken = tokenService.createToken({username}, threeMin);
-    const refreshToken = tokenService.createToken({username}, tenMin);
+    return fetchUser(email, hashedPassword)
+      .then(({ username }) => {
+        console.log(username);
+        const accessToken = tokenService.createToken({username}, threeMin);
+        const refreshToken = tokenService.createToken({username}, tenMin);
+    
+        return {accessToken, refreshToken}
 
-    return Promise.resolve({accessToken, refreshToken})
+      })
+      .catch(error => {
+        if(error.code && error.code === 404) {
+          return Promise.reject(error)
+        }
+        return Promise.reject({code: 500, message: 'Internal error'})
+      });
   }
 }
