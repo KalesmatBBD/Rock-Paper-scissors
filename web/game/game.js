@@ -19,7 +19,7 @@ function handleClick() {
 cards.forEach(card => {
   card.addEventListener('click', function () {
 
-    if (playerScore === 3 || computerScore === 3) {
+    if (playerScore === 3 || computerScore === 3 || timer ===null) {
       return; 
     }
 
@@ -38,7 +38,7 @@ cards.forEach(card => {
     }
     round++;
 
-    if (playerScore === 3 || computerScore === 3) {
+    if (playerScore === 3 || computerScore === 3 ) {
       endGame();
     } else {
       timer = startTimer(15);
@@ -107,14 +107,16 @@ function endGame() {
 
   if (playerScore > computerScore) {
     resultElement.textContent = "Congratulations! You won the game.";
-    
   } else if (playerScore < computerScore) {
     resultElement.textContent = "Oops! You lost the game.";
-   
   } else {
+    resultElement.textContent = "It's a tie!";
+  }
+  if (timer !== null) {
+    clearTimeout(timer);
+    timer = null;
     resultElement.textContent = "Oops! You lost the game.";
   }
-  timer = null;
 }
 
 function resetGame() {
@@ -124,7 +126,6 @@ function resetGame() {
   resetTimer();
   cards.forEach(card => {
     card.removeEventListener('click', handleClick);
-    card.addEventListener('click', handleClick);
   });
   playerScoreElement.textContent = playerScore;
   computerScoreElement.textContent = computerScore;
