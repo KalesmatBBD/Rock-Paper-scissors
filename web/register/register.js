@@ -33,7 +33,6 @@ const submitSignIn = (registration) => {
     responseErrorMessage('', error)
     fetch('http://localhost:8080/register', {
         method: 'POST',
-        mode: "cors",
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
