@@ -1,11 +1,21 @@
 const {
     passwordService
-} = require('../shared/services/password.service');
+} = require('../shared/services');
+
+const {
+    addUser
+} = require('../../database/identityProviderDAL');
 
 module.exports.registerService = {
-    registerPlayer: (playerDetails) => {
-        const {username, email, password} = playerDetails;
+    registerUser: async (userDetails) => {
+        const {username, email, password} = userDetails;
         const hashedPassword = passwordService.encryptPassword(password);
-        return Promise.resolve();
+        return addUser(username, email, hashedPassword)
+            .then(user => {
+                return user
+            })
+            .catch(error => {
+                return Promise.reject({code: 409, message:'User exists'})
+            })
     }
 }

@@ -4,6 +4,7 @@ const {
 } = require('./login.service');
 
 loginRouter.post('', (req, res) => {
+  console.log(req);
   res.status(200).json({})
 });
 
