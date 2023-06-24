@@ -44,7 +44,7 @@ const submitSignIn = (registration) => {
         const data = response.json();
         data.then(res => {
             if (response.status === 200) {
-                // window.location.href = '/login';
+                window.location.href = '/login';
                 responseErrorMessage('', error)
             } else {
                 responseErrorMessage(res.message, error)
