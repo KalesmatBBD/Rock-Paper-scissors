@@ -11,20 +11,17 @@ USE RockPaperScissors
 GO
 
 CREATE TABLE Players (
-  username varchar(50) PRIMARY KEY,
-  email varchar(50),
+  email varchar(50) PRIMARY KEY,
+  username varchar(50) UNIQUE NOT NULL,
   password varchar(50) NOT NULL
 );
 
 CREATE TABLE Score (
-  username varchar(50),
-  score int DEFAULT 0,
-  achievedOn datetime DEFAULT GETDATE(),
-
-  CONSTRAINT fk_user_name
-    FOREIGN KEY (username)
-    REFERENCES Players(username),
-
-  CONSTRAINT uq_score_user_email
-    UNIQUE (username)
+  username varchar(50) UNIQUE,
+  wins int DEFAULT 0,
+  losses int DEFAULT 0,
 );
+
+ALTER TABLE [Score] ADD FOREIGN KEY ([username]) REFERENCES [Players] ([username])
+GO
+

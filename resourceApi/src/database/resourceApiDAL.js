@@ -4,16 +4,17 @@ const config = require('config');
 const dbConfig = config.resourceApi.dbConfig;
 
 async function fetchAllScores() {
-    try {
-        const pool = await sql.connect(dbConfig);
-        const query = "SELECT * FROM score ORDER BY Score DESC";
-        const request = new sql.Request();
-        const result = await request.query(query);
-        sql.close();
-        return result.recordset;
-    } catch (error) {
-        throw error;
-    }
+  try {
+    const pool = await sql.connect(dbConfig);
+    const query =
+      "SELECT username,wins, losses, ROUND(((wins*1.0/losses)*(wins+losses)),2) as score FROM Score ORDER BY score DESC";
+    const request = new sql.Request();
+    const result = await request.query(query);
+    sql.close();
+    return result.recordset;
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function postScore(username,wins,losses){
