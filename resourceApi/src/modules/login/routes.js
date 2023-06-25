@@ -3,8 +3,13 @@ const {
   loginService,
 } = require('./login.service');
 
-loginRouter.post('', (req, res) => {
-  console.log(req);
+const {
+  auth
+} = require('../../middleware/authValidation');
+
+loginRouter.post('', auth, (req, res) => {
+  const user = res.locals.user;
+  console.log(user);
   res.status(200).json({})
 });
 

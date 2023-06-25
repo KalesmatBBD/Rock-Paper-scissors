@@ -5,7 +5,7 @@ const fs = require("fs");
 const key = fs.readFileSync(config.identityProvider.key)
 
 module.exports.tokenService = {
-  createToken: (user, seconds) => {
+  createToken: (user, time) => {
     return jwt.sign(
       {
         user
@@ -13,7 +13,7 @@ module.exports.tokenService = {
       key,
       {
         algorithm: 'RS256',
-        expiresIn: seconds,
+        expiresIn: time,
         audience: 'RPS_API',
         issuer: 'RPS_ID',
       }

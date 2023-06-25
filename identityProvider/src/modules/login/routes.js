@@ -11,8 +11,8 @@ loginRouter.post('', validateBody, (req, res) => {
   return loginService.loginUser(req.body)
     .then(({accessToken, refreshToken}) => {
       res.set('Authorization', 'Bearer '+ accessToken)
-      // res.set('RefreshToken', refreshToken)
-      res.header("Access-Control-Expose-Headers","Authorization");
+      res.set('RefreshToken', 'BearerRef '+refreshToken)
+      res.header("Access-Control-Expose-Headers","Authorization, RefreshToken");
       res.status(200).json({})
     })
     .catch(error => {

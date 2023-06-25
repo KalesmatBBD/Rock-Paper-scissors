@@ -1,3 +1,17 @@
 // index.html javascript file
-const token = sessionStorage.getItem("Authorization")
-console.log(token);
+const accessToken = sessionStorage.getItem("Authorization")
+const refreshToken = sessionStorage.getItem("RefreshToken")
+
+fetch('http://localhost:4040/api/login', {
+    method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'AccessToken': accessToken,
+          'RefreshToken': refreshToken,
+        },
+        body: JSON.stringify({})
+})
+.then(data => {
+    console.log(data);
+})
