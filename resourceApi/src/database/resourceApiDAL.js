@@ -21,12 +21,12 @@ async function postScore(username,wins,losses){
     
     try {
       const pool = await sql.connect(dbConfig);
-      const query = `UPDATE Score SET wins = @wins, losses =@loss WHERE username =@username`;
+      const query = `UPDATE Score SET wins = @wins, losses =@losses WHERE username =@username`;
 
       const request = pool.request();
       request.input('username', sql.VarChar, username);
-      request.input('wins', sql.Int, score);
-      request.input('losses', sql.Int, score);
+      request.input('wins', sql.Int, wins);
+      request.input('losses', sql.Int, losses);
       
       await request.query(query);
       sql.close();

@@ -13,7 +13,7 @@ module.exports.scoresService = {
     postScore: async (scoreDetails) => {
         try{
         const {username, wins,losses} = scoreDetails;
-        await postScore(username,wins,loss);
+        await postScore(username,wins,losses);
         }catch(error){
             throw error;
         }
