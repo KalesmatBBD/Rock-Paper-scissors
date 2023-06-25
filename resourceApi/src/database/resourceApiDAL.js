@@ -17,25 +17,30 @@ async function fetchAllScores() {
   }
 }
 
-async function postScore(username,score){
-    
+async function postScore(username, state) {
     try {
       const pool = await sql.connect(dbConfig);
-      const query = `UPDATE score SET Score = @score WHERE username =@username`;
-
+      let query;
+  
+      if (state === 'win') {
+        query = `UPDATE Score SET wins = wins + 1 WHERE username = @username`;
+      } else if (state === 'loss') {
+        query = `UPDATE Score SET losses = losses + 1 WHERE username = @username`;
+      } else {
+        throw new Error('Invalid state provided');
+      }
+  
       const request = pool.request();
       request.input('username', sql.VarChar, username);
-      request.input('score', sql.Int, score);
-      
+  
       await request.query(query);
       sql.close();
-
-  } catch (error) {
-    console.log('Original Error:', error);
+    } catch (error) {
+      console.log('Original Error:', error);
       throw error;
+    }
   }
-}
-
+  
 module.exports = {
     fetchAllScores,
     postScore,
