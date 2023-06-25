@@ -142,7 +142,7 @@ const submitScore= (username,score) => {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(username,score)
+      body: JSON.stringify({username,score})
   })
   .then(response => {
       console.log(response.status);

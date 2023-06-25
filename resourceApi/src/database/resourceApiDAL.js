@@ -16,15 +16,16 @@ async function fetchAllScores() {
     }
 }
 
-async function postScore(username,score){
+async function postScore(username,wins,losses){
     
     try {
       const pool = await sql.connect(dbConfig);
-      const query = `UPDATE score SET Score = @score WHERE username =@username`;
+      const query = `UPDATE Score SET wins = @wins, losses =@loss WHERE username =@username`;
 
       const request = pool.request();
       request.input('username', sql.VarChar, username);
-      request.input('score', sql.Int, score);
+      request.input('wins', sql.Int, score);
+      request.input('losses', sql.Int, score);
       
       await request.query(query);
       sql.close();
