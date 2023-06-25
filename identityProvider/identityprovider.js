@@ -5,7 +5,8 @@ const config = require('config');
 
 const {
   loginRouter,
-  registerRouter
+  registerRouter,
+  tokenRouter
 } = require('./src/routes');
 
 const app = express();
@@ -19,7 +20,7 @@ app.use(express.json());
 
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
+app.use('/token', tokenRouter);
 
-app.listen(port, '0.0.0.0', () => {
-  console.log(`http://localhost:${port}`);
-});
+app.listen(port);
+console.log(`http://localhost:${port}`);
