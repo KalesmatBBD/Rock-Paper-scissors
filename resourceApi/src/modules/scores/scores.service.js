@@ -12,8 +12,8 @@ module.exports.scoresService = {
 
     postScore: async (scoreDetails) => {
         try{
-        const {username, wins,losses} = scoreDetails;
-        await postScore(username,wins,losses);
+        const {username, state} = scoreDetails;
+        await postScore(username,state);
         }catch(error){
             throw error;
         }
