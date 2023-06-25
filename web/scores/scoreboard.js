@@ -12,22 +12,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   for (let i = 0; i < Math.min(data.recordset.length, 20); i++) {
     sample.push({
       name: data.recordset[i].username,
+      wins: data.recordset[i].wins,
+      losses: data.recordset[i].losses,
       score: data.recordset[i].score,
     });
     const row = document.createElement("tr");
 
-    const count = document.createElement("td");
-    const name = document.createElement("td");
-    const score = document.createElement("td");
-    count.classList.add("score-count");
+    for (const column of ["count", "name", "wins", "losses", "score"]) {
+      const cell = document.createElement("td");
 
-    count.textContent = i + 1;
-    name.textContent = sample[i].name;
-    score.textContent = sample[i].score;
-    row.appendChild(count);
-    row.appendChild(name);
-    row.appendChild(score);
+      if (column === "count") {
+        cell.classList.add("score-count");
+        cell.textContent = i + 1;
+      } else {
+        cell.textContent = sample[i][column];
+      }
 
+      row.appendChild(cell);
+    }
     tableBody.appendChild(row);
   }
 });
