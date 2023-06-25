@@ -16,6 +16,25 @@ async function fetchAllScores() {
     }
 }
 
+async function fetchUserScore(username){
+    
+    try {
+      const pool = await sql.connect(dbConfig);
+      const query = `SELECT username, wins, losses FROM score WHERE username =@username`;
+
+      const request = pool.request();
+      request.input('username', sql.VarChar, username);
+      
+      const result = await request.query(query);
+      sql.close();
+      return result.recordset;
+
+  } catch (error) {
+    console.log('Original Error:', error);
+      throw error;
+  }
+}
+
 async function postScore(username,score){
     
     try {
@@ -38,4 +57,5 @@ async function postScore(username,score){
 module.exports = {
     fetchAllScores,
     postScore,
+    fetchUserScore,
 };
