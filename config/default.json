@@ -23,9 +23,9 @@
       "database": "RockPaperScissors",
       "server": "rockpaperscissors.cnhrl5wk3uki.af-south-1.rds.amazonaws.com",
       "options": {
-          "encrypt": false,
-          "trustServerCertificate": true
-      }
+        "encrypt": false,
+        "trustServerCertificate": true
+    }
     },
     "key": "certs/api.key"
   }

@@ -1,5 +1,5 @@
 const {
-    fetchAllScores
+    fetchAllScores,postScore
 } = require('../../database/resourceApiDAL');
 
 module.exports.scoresService = {
@@ -8,5 +8,14 @@ module.exports.scoresService = {
         .then((data) => {
             return data;
         });
+    },
+
+    postScore: async (scoreDetails) => {
+        try{
+        const {username, score} = scoreDetails;
+        await postScore(username,score);
+        }catch(error){
+            throw error;
+        }
     }
 }

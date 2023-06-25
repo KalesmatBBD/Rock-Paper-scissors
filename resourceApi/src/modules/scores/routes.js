@@ -10,12 +10,20 @@ scoresRouter.get("/getScores", async (req, res) => {
     .then(data => {
       return res.status(200).json(data);
     })
-    .catch(() => {
-      return res.status(500).json({message: 'Internal Error'});
+    .catch((error) => {
+      return res.status(500).json({error});
     })
 });
-scoresRouter.post("", (req, res) => {
-  res.status(200).json({});
+
+
+scoresRouter.post("/postScore", (req, res) => {
+  return scoresService.postScore(req.body)
+  .then(() => {
+    res.status(200).json({});
+  })
+  .catch((error) => {
+    return res.status(500).json({error});
+  })
 });
 
 module.exports = {
