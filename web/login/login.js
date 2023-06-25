@@ -35,7 +35,6 @@ const submitSignIn = (registration) => {
     const error = document.getElementById('error');
     fetch('http://localhost:8080/login', {
         method: 'POST',
-        mode: "cors",
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -46,17 +45,24 @@ const submitSignIn = (registration) => {
         const data = response.json();
         data.then(res => {
             if (response.status === 200) {
+                sessionStorage.removeItem("Authorization");
+                sessionStorage.removeItem("RefreshToken");
                 sessionStorage.setItem("Authorization", response.headers.get('Authorization').split(' ')[1]);
+                sessionStorage.setItem("RefreshToken", response.headers.get('RefreshToken').split(' ')[1]);
                 window.location.href = '/';
                 responseErrorMessage('', error)
 
             }
             else if (response.status === 404) {
-                responseErrorMessage(res.message, error)
+                responseErrorMessage(res.message, error);
                 toggleRegisterButton()
+                sessionStorage.removeItem("Authorization");
+                sessionStorage.removeItem("RefreshToken");
             } 
             else {
-                responseErrorMessage(res.message, error)
+                responseErrorMessage(res.message, error);
+                sessionStorage.removeItem("Authorization");
+                sessionStorage.removeItem("RefreshToken");
             }
 
         })
