@@ -31,7 +31,7 @@ const responseErrorMessage = (message, article) => {
 const submitSignIn = (registration) => {
     const error = document.getElementById('error');
     responseErrorMessage('', error)
-    fetch('http://localhost:8080/register', {
+    fetch('https://d2sj7c5qkajl42.cloudfront.net/register', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',

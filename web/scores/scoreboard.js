@@ -2,7 +2,7 @@ const sample = [];
 let data;
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const result = await fetch("http://localhost:4040/api/scores/getScores");
+    const result = await fetch("https://d3c5wz318iq2hl.cloudfront.net/api/scores/getScores");
     data = await result.json();
   } catch (error) {
     console.error(error);
