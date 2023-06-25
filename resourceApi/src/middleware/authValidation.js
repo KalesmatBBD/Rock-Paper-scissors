@@ -67,7 +67,9 @@ module.exports = {
                 throw new Error('Invalid Creds')
             }
             res.locals.user = accessData.user;
-            res.locals.accessToken = accesstoken;
+            res.set('Authorization', 'Bearer '+ accesstoken)
+            res.set('RefreshToken', 'BearerRef '+ refreshtoken)
+            res.header("Access-Control-Expose-Headers","Authorization, RefreshToken");
         } catch (error) {
             try {
                 if (error.message === 'Invalid Refresh Token' || error.message === 'Invalid Creds') {
@@ -78,7 +80,9 @@ module.exports = {
                     const data = await getNewAccessToken(accesstoken, refreshtoken)
                     const newAccessData = verifyAccessToken(data.accesstoken);
                     res.locals.user = newAccessData.user;
-                    res.locals.accessToken = accesstoken;
+                    res.set('Authorization', 'Bearer '+ data.accesstoken)
+                    res.set('RefreshToken', 'BearerRef '+data.refreshtoken)
+                    res.header("Access-Control-Expose-Headers","Authorization, RefreshToken");
                     next()
                     
                 }
@@ -86,7 +90,6 @@ module.exports = {
                 return res.status(401).json({message: 'Access has expired'})
             }
             res.locals.user = null;
-            res.locals.accessToken = null;
         }
         next();
     }
