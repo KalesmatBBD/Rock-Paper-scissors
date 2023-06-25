@@ -10,33 +10,20 @@ scoresRouter.get("/getScores", async (req, res) => {
     .then(data => {
       return res.status(200).json(data);
     })
-    .catch(() => {
-      return res.status(500).json({message: 'Internal Error'});
+    .catch((error) => {
+      return res.status(500).json({error});
     })
 });
 
 
-scoresRouter.post("/postScore", async (req, res) => {
-  const { userName, score } = req.body; 
-
-  const query = `UPDATE score SET Score = ${score} WHERE UserName = '${userName}'`;
-
-  try {
-    let pool = await sql.connect(resourceApiConfig.dbConfig);
-    const request = pool.request();
-    request.query(query, (err, result) => {
-      if (err) {
-        console.error("Error updating data:", err);
-        res.status(500).json({ error: "An error occurred while updating data in the database." });
-      } else {
-        console.dir(result);
-        res.status(200).json({ message: "Score updated successfully." });
-      }
-    });
-  } catch (err) {
-    console.error("Error connecting to the database:", err);
-    throw err;
-  }
+scoresRouter.post("/postScore", (req, res) => {
+  return scoresService.postScore(req.body)
+  .then(() => {
+    res.status(200).json({});
+  })
+  .catch((error) => {
+    return res.status(500).json({error});
+  })
 });
 
 module.exports = {
