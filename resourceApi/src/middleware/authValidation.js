@@ -70,7 +70,7 @@ module.exports = {
             res.locals.accessToken = accesstoken;
         } catch (error) {
             try {
-                if (error.message === 'Invalid Refresh Token') {
+                if (error.message === 'Invalid Refresh Token' || error.message === 'Invalid Creds') {
                     throw new Error('Access has expired');
                 }
                 const refreshData = verifyRefreshToken(refreshtoken);
