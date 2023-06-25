@@ -33,7 +33,6 @@ const submitSignIn = (registration) => {
     responseErrorMessage('', error)
     fetch('http://localhost:8080/register', {
         method: 'POST',
-        mode: "cors",
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
@@ -44,7 +43,7 @@ const submitSignIn = (registration) => {
         const data = response.json();
         data.then(res => {
             if (response.status === 200) {
-                // window.location.href = '/login';
+                window.location.href = '/login';
                 responseErrorMessage('', error)
             } else {
                 responseErrorMessage(res.message, error)
