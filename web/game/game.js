@@ -135,7 +135,7 @@ function resetGame() {
 }
 
 const submitScore= (username,score) => {
-  fetch('http://localhost:8080/register', {
+  fetch('http://localhost:4040/api/scores/postScore', {
       method: 'POST',
       mode: "cors",
       headers: {
