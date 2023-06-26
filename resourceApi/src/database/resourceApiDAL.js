@@ -56,7 +56,6 @@ async function postScore(username, state) {
 
       return response;
     } catch (error) {
-      console.log('Original Error:', error);
       throw error;
   }
 }

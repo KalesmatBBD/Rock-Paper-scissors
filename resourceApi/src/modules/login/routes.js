@@ -9,7 +9,6 @@ const {
 
 loginRouter.post('', auth, (req, res) => {
   const user = res.locals.user;
-  console.log(user);
   res.status(200).json({})
 });
 
