@@ -27,5 +27,6 @@ app.use('/api/player', playerRouter);
 app.use('/api/register', registerRouter);
 app.use('/api/scores', scoresRouter);
 
-app.listen(port);
-console.log(`http://localhost:${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`http://localhost:${port}`);
+});
