@@ -27,7 +27,6 @@
         "trustServerCertificate": true
       }
     },
-    "key": "certs/api.key",
-    "identityProviderUrl": "https://d2sj7c5qkajl42.cloudfront.net"
+    "key": "certs/api.key"
   }
 }
