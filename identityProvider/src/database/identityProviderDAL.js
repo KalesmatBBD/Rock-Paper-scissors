@@ -33,6 +33,25 @@ async function fetchUser(email, password) {
     }
 }
 
+async function fetchUserByUserName(username) {
+    try {
+        await sql.connect(dbConfig);
+
+        const query = `select Username from Users where Username = @username`;
+        const request = new sql.Request();
+        request.input('username', sql.VarChar, username);
+
+        const result = await request.query(query);
+        await sql.close();
+        if (result.recordset.length === 0) {
+            return Promise.reject({code: 404, message: 'User does not exits'})
+        }
+        return result.recordset[0].Username;
+    } catch (error) {
+        throw error;
+    }
+}
+
 async function addUser(username, email, password) {
     try {
         await sql.connect(dbConfig);
@@ -59,4 +78,5 @@ async function addUser(username, email, password) {
 module.exports = {
     fetchUser,
     addUser,
+    fetchUserByUserName
 };

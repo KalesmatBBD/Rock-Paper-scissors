@@ -27,6 +27,7 @@
         "trustServerCertificate": true
       }
     },
-    "key": "certs/api.key"
+    "key": "certs/api.key",
+    "identityProviderUrl": "http://localhost:8080"
   }
 }
