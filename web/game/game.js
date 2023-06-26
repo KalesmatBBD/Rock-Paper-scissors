@@ -11,6 +11,7 @@ let playerScore = 0;
 let computerScore = 0;
 let round = 0;
 let timer;
+let timeExpired = false;
 
 function handleClick() {
   if (timer) {
@@ -22,14 +23,14 @@ function handleClick() {
 cards.forEach(card => {
   card.addEventListener('click', function () {
 
-    if (playerScore === 3 || computerScore === 3 || timer ===null) {
+    if (playerScore === 3 || computerScore === 3 || timeExpired===true) {
       return; 
     }
-
+    console.log(timer)
     const playerChoice = this.querySelector('img').getAttribute('alt');
     const computerChoice = generateComputerChoice();
     updateSelectedCards(playerChoice, computerChoice);
-    timer=startTimer(15);
+    timer=startTimer();
 
     const winner = determineWinner(playerChoice, computerChoice);
     if (winner === 'player') {
@@ -44,7 +45,7 @@ cards.forEach(card => {
     if (playerScore === 3 || computerScore === 3 ) {
       endGame();
     } else {
-      timer = startTimer(15);
+      timer = startTimer();
     }
     
   });
@@ -86,17 +87,20 @@ function determineWinner(playerChoice, computerChoice) {
 
 function startTimer() {
   resetTimer();
-  let time = 15;
+  let time = 5;
   timerElement.textContent = time;
 
-  return setInterval(() => {
+  timer=  setInterval(() => {
     time--;
     timerElement.textContent = time;
 
     if (time === 0) {
+      timeExpired = true;
       endGame();
     }
   }, 1000);
+
+  return timer
 }
 
 function resetTimer() {
@@ -106,23 +110,21 @@ function resetTimer() {
 
 function endGame() {
   resetTimer();
-  cards.forEach(card => card.removeEventListener('click',handleClick));
+  cards.forEach(card => card.removeEventListener('click', handleClick));
 
-  if (playerScore > computerScore) {
-    resultElement.textContent = "Congratulations! You won the game.";
-    submitScore('player1', 'win');
-  } else if (playerScore < computerScore) {
+  if (timeExpired || playerScore < computerScore) {
     resultElement.textContent = "Oops! You lost the game.";
     submitScore('player1', 'loss');
+  } else if (playerScore > computerScore) {
+    console.log(timer)
+    resultElement.textContent = "Congratulations! You won the game.";
+    submitScore('player1', 'win');
   } else {
-    if (timer !== null) {
-      clearTimeout(timer);
-      timer = null;
-      resultElement.textContent = "Oops! You lost the game.";
-      submitScore('player1', 'loss');
-    }
+    submitScore('player1', 'loss');
+    resultElement.textContent = "Oops! You lost the game.";
   }
 }
+
 
 function resetGame() {
   playerScore = 0;
@@ -136,11 +138,13 @@ function resetGame() {
   computerScoreElement.textContent = computerScore;
   resultElement.textContent = '';
   updateSelectedCards('', '');
-  timer = startTimer(15);
+  timer = startTimer();
+  timeExpired = false;
+  console.log(timeExpired)
 }
 
- const replayButton = document.getElementById('replay-button');
-  replayButton.addEventListener('click', resetGame);
+const replayButton = document.getElementById('replay-button');
+replayButton.addEventListener('click', resetGame);
 
 const submitScore= (username,state) => {
   fetch('http://localhost:4040/api/scores/postScore', {
