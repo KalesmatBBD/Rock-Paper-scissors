@@ -1,10 +1,10 @@
 const player = [];
 let data;
+let sessionuser = sessionStorage.getItem("Authorization").name.username
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const obj = { user: "player1"  };
-    console.log("tets");
+    const obj = { user: sessionuser };
     const result = await fetch("http://localhost:4040/api/player/getScore", {
       method: 'GET',
       mode: "cors",
