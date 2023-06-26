@@ -7,6 +7,10 @@ const resultElement = document.getElementById('result');
 const accessToken = sessionStorage.getItem("Authorization")
 const refreshToken = sessionStorage.getItem("RefreshToken")
 
+if(accessToken == null && refreshToken == null){
+  alert("Please login again")
+  window.location.replace("/login");
+}
 let playerScore = 0;
 let computerScore = 0;
 let round = 0;
