@@ -56,7 +56,6 @@ async function fetchUserScore(username){
     return result.recordset;
 
 } catch (error) {
-  console.log('Original Error:', error);
     throw error;
 }
 }
