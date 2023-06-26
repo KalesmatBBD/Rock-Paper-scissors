@@ -17,5 +17,5 @@ module.exports.scoresService = {
         }catch(error){
             throw error;
         }
-    }
+    },
 }
