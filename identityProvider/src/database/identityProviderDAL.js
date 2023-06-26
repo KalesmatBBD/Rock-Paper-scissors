@@ -75,8 +75,29 @@ async function addUser(username, email, password) {
     }
 }
 
+async function addPlayer(username) {
+    try {
+        await sql.connect(config.resourceApi.dbConfig);
+        let query;
+        query = `INSERT INTO Players (username, email, password)
+            OUTPUT inserted.username
+            VALUES (@username, @email, @password);`
+        const request = new sql.Request();
+        request.input('username', sql.VarChar, username);
+        request.input('email', sql.VarChar, username);
+        request.input('password', sql.VarChar, 'N/A');
+  
+        const result = await request.query(query);
+        sql.close();
+        return result.recordset[0]
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     fetchUser,
     addUser,
-    fetchUserByUserName
+    fetchUserByUserName,
+    addPlayer,
 };
