@@ -5,7 +5,10 @@ const refreshToken = sessionStorage.getItem("RefreshToken");
 if(accessToken == null && refreshToken == null){
   window.location.replace("/login");
 }
-
+function logout(){
+  sessionStorage.removeItem("Authorization");
+  sessionStorage.removeItem("RefreshToken");
+}
 document.addEventListener('DOMContentLoaded', async () => {
   try {
     const result = await fetch('http://localhost:4040/api/player/getScore', {
