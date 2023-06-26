@@ -40,8 +40,33 @@ async function postScore(username, state) {
       throw error;
     }
   }
+
+  async function createPlayer(username) {
+    try {
+      const pool = await sql.connect(dbConfig);
+      let query;
+      query = `INSERT INTO Score (username, wins, losses)
+        OUTPUT inserted.username
+        VALUES (@username, @wins, @losses);`
+      request.input('username', sql.VarChar, username);
+      request.input('wins', sql.Int, 0);
+      request.input('losses', sql.Int, 0);
+  
+      const request = pool.request();
+  
+      const result = await request.query(query);
+      return result.recordset[0]
+      sql.close();
+    } catch (error) {
+      console.log('Original Error:', error);
+      throw error;
+    }
+  }
+
+
   
 module.exports = {
     fetchAllScores,
     postScore,
+    createPlayer
 };
