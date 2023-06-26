@@ -4,6 +4,10 @@ let data;
 const accessToken = sessionStorage.getItem("Authorization");
 const refreshToken = sessionStorage.getItem("RefreshToken");
 
+function logout(){
+  sessionStorage.removeItem("Authorization");
+  sessionStorage.removeItem("RefreshToken");
+}
 if (accessToken == null && refreshToken == null) {
   alert("Please login again");
   window.location.replace("/login");

@@ -11,6 +11,12 @@ if(accessToken == null && refreshToken == null){
   alert("Please login again")
   window.location.replace("/login");
 }
+
+function logout(){
+  sessionStorage.removeItem("Authorization");
+  sessionStorage.removeItem("RefreshToken");
+}
+
 let playerScore = 0;
 let computerScore = 0;
 let round = 0;
