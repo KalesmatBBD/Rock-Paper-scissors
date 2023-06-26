@@ -23,7 +23,7 @@ async function fetchUser(email, password) {
         const result = await request.query(query);
         await sql.close();
         if (result.recordset.length === 0) {
-            return Promise.reject({code: 404, message: 'User does not exits'})
+            return Promise.reject({code: 404, message: 'Username or Password is incorrect.'})
         }
         const user = new User(result.recordset[0].Username, result.recordset[0].Email, result.recordset[0].Password);
 
@@ -44,7 +44,7 @@ async function fetchUserByUserName(username) {
         const result = await request.query(query);
         await sql.close();
         if (result.recordset.length === 0) {
-            return Promise.reject({code: 404, message: 'User does not exits'})
+            return Promise.reject({code: 404, message: 'Username or Password is incorrect.'})
         }
         return result.recordset[0].Username;
     } catch (error) {

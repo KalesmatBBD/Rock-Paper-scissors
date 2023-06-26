@@ -28,6 +28,6 @@
       }
     },
     "key": "certs/api.key",
-    "identityProviderUrl": "http://localhost:8080"
+    "identityProviderUrl": "https://d2sj7c5qkajl42.cloudfront.net"
   }
 }

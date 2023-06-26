@@ -22,5 +22,6 @@ app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 app.use('/token', tokenRouter);
 
-app.listen(port);
-console.log(`http://localhost:${port}`);
+app.listen(port, '0.0.0.0', () => {
+  console.log(`http://localhost:${port}`);
+});
