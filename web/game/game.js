@@ -107,8 +107,10 @@ function endGame() {
 
   if (playerScore > computerScore) {
     resultElement.textContent = "Congratulations! You won the game.";
+    submitScore('player1', 'win');
   } else if (playerScore < computerScore) {
     resultElement.textContent = "Oops! You lost the game.";
+    submitScore('player1', 'loss');
   } else {
     resultElement.textContent = "It's a tie!";
   }
@@ -134,7 +136,7 @@ function resetGame() {
   timer = startTimer(15);
 }
 
-const submitScore= (username,score) => {
+const submitScore= (username,state) => {
   fetch('http://localhost:4040/api/scores/postScore', {
       method: 'POST',
       mode: "cors",
@@ -142,12 +144,12 @@ const submitScore= (username,score) => {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(username,score)
+      body: JSON.stringify({username,state})
   })
   .then(response => {
-      console.log(response.status);
+      console.log("Failed",response);
       if (response.status === 200) {
-        console.log(response.status);
+        console.log("Success",response);
       }
   });
 }

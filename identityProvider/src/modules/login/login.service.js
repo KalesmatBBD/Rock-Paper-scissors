@@ -9,13 +9,12 @@ const {
 
 module.exports.loginService = {
   loginUser: (userDetails) => {
-    const threeMin = '180';
-    const tenMin = '600';
+    const threeMin = '3 min';
+    const tenMin = '10m';
     const {email, password} = userDetails;
     const hashedPassword = passwordService.encryptPassword(password);
     return fetchUser(email, hashedPassword)
       .then(({ username }) => {
-        console.log(username);
         const accessToken = tokenService.createToken({username}, threeMin);
         const refreshToken = tokenService.createToken({username}, tenMin);
     
