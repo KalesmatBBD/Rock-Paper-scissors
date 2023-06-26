@@ -154,7 +154,7 @@ const replayButton = document.getElementById('replay-button');
 replayButton.addEventListener('click', resetGame);
 
 const submitScore= (state) => {
-  fetch('http://localhost:4040/api/scores/postScore', {
+  fetch('https://djqw8yat5yomm.cloudfront.net/api/scores/postScore', {
       method: 'POST',
       mode: "cors",
       headers: {

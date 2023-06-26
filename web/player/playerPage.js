@@ -11,7 +11,7 @@ function logout(){
 }
 document.addEventListener('DOMContentLoaded', async () => {
   try {
-    const result = await fetch('http://localhost:4040/api/player/getScore', {
+    const result = await fetch('https://djqw8yat5yomm.cloudfront.net/api/player/getScore', {
       method: 'GET',
       mode: 'cors',
       headers: {

@@ -14,7 +14,7 @@ if (accessToken == null && refreshToken == null) {
 }
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const result = await fetch("http://localhost:4040/api/scores/getScores", {
+    const result = await fetch("https://djqw8yat5yomm.cloudfront.net/api/scores/getScores", {
       mode: "cors",
       headers: {
         Accept: "application/json",

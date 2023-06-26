@@ -33,7 +33,7 @@ const toggleRegisterButton = () => {
 
 const submitSignIn = (registration) => {
     const error = document.getElementById('error');
-    fetch('http://localhost:8080/login', {
+    fetch('https://d3vbn0ixkks4al.cloudfront.net/login', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',

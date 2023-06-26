@@ -8,7 +8,7 @@ const audience = 'RPS_API';
 const issuer = 'RPS_ID';
 
 const getNewAccessToken = async (accessToken, refreshToken) => {
-    const response = await axios.get(`http://localhost:8080/token`, {
+    const response = await axios.get(`https://d3vbn0ixkks4al.cloudfront.net/token`, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
