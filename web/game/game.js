@@ -125,7 +125,6 @@ function endGame() {
     resultElement.textContent = "Oops! You lost the game.";
     submitScore('loss');
   } else if (playerScore > computerScore) {
-    console.log(timer)
     resultElement.textContent = "Congratulations! You won the game.";
     submitScore('win');
   } else {
@@ -167,11 +166,7 @@ const submitScore= (state) => {
       body: JSON.stringify({state})
   })
   .then(response => {
-    if (response.status === 200) {
-      console.log('Could not update scores for non user');
-    }
-    else if (response.status === 201) {
-      console.log("Success",response);
+    if (response.status === 201) {
       sessionStorage.removeItem("Authorization");
       sessionStorage.removeItem("RefreshToken");
       sessionStorage.setItem("Authorization", response.headers.get('Authorization').split(' ')[1]);
@@ -181,7 +176,6 @@ const submitScore= (state) => {
       window.location.href = '/login';
     }
     else if (response.status === 500) {
-      console.log("Failed",response);
     }
   });
 }

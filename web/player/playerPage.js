@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     data = await result.json();
   } catch (error) {
-    console.error(error);
   }
   
   document.getElementById("name").innerHTML = data[0].username;
