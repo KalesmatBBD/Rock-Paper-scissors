@@ -49,9 +49,8 @@ const submitSignIn = (registration) => {
                 sessionStorage.removeItem("RefreshToken");
                 sessionStorage.setItem("Authorization", response.headers.get('Authorization').split(' ')[1]);
                 sessionStorage.setItem("RefreshToken", response.headers.get('RefreshToken').split(' ')[1]);
-                window.location.href = '/';
                 responseErrorMessage('', error)
-
+                window.location.href = '/player';
             }
             else if (response.status === 404) {
                 responseErrorMessage(res.message, error);
