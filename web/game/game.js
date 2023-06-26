@@ -26,7 +26,6 @@ cards.forEach(card => {
     if (playerScore === 3 || computerScore === 3 || timeExpired===true) {
       return; 
     }
-    console.log(timer)
     const playerChoice = this.querySelector('img').getAttribute('alt');
     const computerChoice = generateComputerChoice();
     updateSelectedCards(playerChoice, computerChoice);
@@ -140,7 +139,6 @@ function resetGame() {
   updateSelectedCards('', '');
   timer = startTimer();
   timeExpired = false;
-  console.log(timeExpired)
 }
 
 const replayButton = document.getElementById('replay-button');
