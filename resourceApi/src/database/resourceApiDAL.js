@@ -51,8 +51,10 @@ async function postScore(username, state) {
       const request = pool.request();
       request.input('username', sql.VarChar, username);
     
-      await request.query(query);
+      const response = await request.query(query);
       sql.close();
+
+      return response;
     } catch (error) {
       console.log('Original Error:', error);
       throw error;

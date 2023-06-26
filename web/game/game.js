@@ -114,13 +114,13 @@ function endGame() {
 
   if (timeExpired || playerScore < computerScore) {
     resultElement.textContent = "Oops! You lost the game.";
-    submitScore('player1', 'loss');
+    submitScore('loss');
   } else if (playerScore > computerScore) {
     console.log(timer)
     resultElement.textContent = "Congratulations! You won the game.";
-    submitScore('player1', 'win');
+    submitScore('win');
   } else {
-    submitScore('player1', 'loss');
+    submitScore('loss');
     resultElement.textContent = "Oops! You lost the game.";
   }
 }
@@ -146,7 +146,7 @@ function resetGame() {
 const replayButton = document.getElementById('replay-button');
 replayButton.addEventListener('click', resetGame);
 
-const submitScore= (username,state) => {
+const submitScore= (state) => {
   fetch('http://localhost:4040/api/scores/postScore', {
       method: 'POST',
       mode: "cors",
@@ -156,13 +156,25 @@ const submitScore= (username,state) => {
         'AccessToken': accessToken,
         'RefreshToken': refreshToken,
       },
-      body: JSON.stringify({username,state})
+      body: JSON.stringify({state})
   })
   .then(response => {
+    if (response.status === 200) {
+      console.log('Could not update scores for non user');
+    }
+    else if (response.status === 201) {
+      console.log("Success",response);
+      sessionStorage.removeItem("Authorization");
+      sessionStorage.removeItem("RefreshToken");
+      sessionStorage.setItem("Authorization", response.headers.get('Authorization').split(' ')[1]);
+      sessionStorage.setItem("RefreshToken", response.headers.get('RefreshToken').split(' ')[1]);
+    }
+    else if (response.status === 401) {
+      window.location.href = '/login';
+    }
+    else if (response.status === 500) {
       console.log("Failed",response);
-      if (response.status === 200) {
-        console.log("Success",response);
-      }
+    }
   });
 }
 
