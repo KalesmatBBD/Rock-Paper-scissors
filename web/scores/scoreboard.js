@@ -1,8 +1,27 @@
 const sample = [];
 let data;
+
+const accessToken = sessionStorage.getItem("Authorization");
+const refreshToken = sessionStorage.getItem("RefreshToken");
+
+function logout(){
+  sessionStorage.removeItem("Authorization");
+  sessionStorage.removeItem("RefreshToken");
+}
+if (accessToken == null && refreshToken == null) {
+  alert("Please login again");
+  window.location.replace("/login");
+}
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const result = await fetch("https://d3c5wz318iq2hl.cloudfront.net/api/scores/getScores");
+    const result = await fetch("http://localhost:4040/api/scores/getScores", {
+      mode: "cors",
+      headers: {
+        Accept: "application/json",
+        AccessToken: accessToken,
+        RefreshToken: refreshToken,
+      },
+    });
     data = await result.json();
   } catch (error) {
     console.error(error);
@@ -33,4 +52,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     tableBody.appendChild(row);
   }
+});
+
+document.querySelector(".fa").addEventListener("click", async () => {
+  window.location.href = "/player";
 });
