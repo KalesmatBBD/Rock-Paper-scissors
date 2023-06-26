@@ -3,12 +3,16 @@ const {
   playerService,
 } = require('./player.service');
 
-playerRouter.post('', (req, res) => {
+const {
+  auth
+} = require('../../middleware/authValidation');
+
+playerRouter.post('', auth, (req, res) => {
   res.status(200).json({})
 });
 
-playerRouter.get("/getScore", async (req, res) => {
-  let name = req.body.user;
+playerRouter.get('/getScore', auth, async (req, res) => {
+  let name = "player1";
   return playerService.fetchUserScore(name)
     .then(data => {
       return res.status(200).json(data);
