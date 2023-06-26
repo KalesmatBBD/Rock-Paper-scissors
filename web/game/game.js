@@ -4,10 +4,14 @@ const computerScoreElement = document.getElementById('computer-score');
 const timerElement = document.getElementById('timer');
 const resultElement = document.getElementById('result');
 
+const accessToken = sessionStorage.getItem("Authorization")
+const refreshToken = sessionStorage.getItem("RefreshToken")
+
 let playerScore = 0;
 let computerScore = 0;
 let round = 0;
 let timer;
+let timeExpired = false;
 
 function handleClick() {
   if (timer) {
@@ -19,14 +23,14 @@ function handleClick() {
 cards.forEach(card => {
   card.addEventListener('click', function () {
 
-    if (playerScore === 3 || computerScore === 3 || timer ===null) {
+    if (playerScore === 3 || computerScore === 3 || timeExpired===true) {
       return; 
     }
-
+    console.log(timer)
     const playerChoice = this.querySelector('img').getAttribute('alt');
     const computerChoice = generateComputerChoice();
     updateSelectedCards(playerChoice, computerChoice);
-    timer=startTimer(15);
+    timer=startTimer();
 
     const winner = determineWinner(playerChoice, computerChoice);
     if (winner === 'player') {
@@ -41,7 +45,7 @@ cards.forEach(card => {
     if (playerScore === 3 || computerScore === 3 ) {
       endGame();
     } else {
-      timer = startTimer(15);
+      timer = startTimer();
     }
     
   });
@@ -83,17 +87,20 @@ function determineWinner(playerChoice, computerChoice) {
 
 function startTimer() {
   resetTimer();
-  let time = 15;
+  let time = 5;
   timerElement.textContent = time;
 
-  return setInterval(() => {
+  timer=  setInterval(() => {
     time--;
     timerElement.textContent = time;
 
     if (time === 0) {
+      timeExpired = true;
       endGame();
     }
   }, 1000);
+
+  return timer
 }
 
 function resetTimer() {
@@ -103,23 +110,21 @@ function resetTimer() {
 
 function endGame() {
   resetTimer();
-  cards.forEach(card => card.removeEventListener('click',handleClick));
+  cards.forEach(card => card.removeEventListener('click', handleClick));
 
-  if (playerScore > computerScore) {
-    resultElement.textContent = "Congratulations! You won the game.";
-    submitScore('player1', 'win');
-  } else if (playerScore < computerScore) {
+  if (timeExpired || playerScore < computerScore) {
     resultElement.textContent = "Oops! You lost the game.";
-    submitScore('player1', 'loss');
+    submitScore('loss');
+  } else if (playerScore > computerScore) {
+    console.log(timer)
+    resultElement.textContent = "Congratulations! You won the game.";
+    submitScore('win');
   } else {
-    resultElement.textContent = "It's a tie!";
-  }
-  if (timer !== null) {
-    clearTimeout(timer);
-    timer = null;
+    submitScore('loss');
     resultElement.textContent = "Oops! You lost the game.";
   }
 }
+
 
 function resetGame() {
   playerScore = 0;
@@ -133,25 +138,43 @@ function resetGame() {
   computerScoreElement.textContent = computerScore;
   resultElement.textContent = '';
   updateSelectedCards('', '');
-  timer = startTimer(15);
+  timer = startTimer();
+  timeExpired = false;
+  console.log(timeExpired)
 }
 
-const submitScore= (username,state) => {
+const replayButton = document.getElementById('replay-button');
+replayButton.addEventListener('click', resetGame);
+
+const submitScore= (state) => {
   fetch('http://localhost:4040/api/scores/postScore', {
       method: 'POST',
       mode: "cors",
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'AccessToken': accessToken,
+        'RefreshToken': refreshToken,
       },
-      body: JSON.stringify({username,state})
+      body: JSON.stringify({state})
   })
   .then(response => {
+    if (response.status === 200) {
+      console.log('Could not update scores for non user');
+    }
+    else if (response.status === 201) {
+      console.log("Success",response);
+      sessionStorage.removeItem("Authorization");
+      sessionStorage.removeItem("RefreshToken");
+      sessionStorage.setItem("Authorization", response.headers.get('Authorization').split(' ')[1]);
+      sessionStorage.setItem("RefreshToken", response.headers.get('RefreshToken').split(' ')[1]);
+    }
+    else if (response.status === 401) {
+      window.location.href = '/login';
+    }
+    else if (response.status === 500) {
       console.log("Failed",response);
-      if (response.status === 200) {
-        console.log("Success",response);
-      }
+    }
   });
 }
 
-resetGame();
