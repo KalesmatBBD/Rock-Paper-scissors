@@ -1,17 +1,15 @@
-// index.html javascript file
-const accessToken = sessionStorage.getItem("Authorization")
-const refreshToken = sessionStorage.getItem("RefreshToken")
+window.onload=function() {
+  landing()
+}
 
-fetch('http://localhost:4040/api/login', {
-    method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'AccessToken': accessToken,
-          'RefreshToken': refreshToken,
-        },
-        body: JSON.stringify({})
-})
-.then(data => {
-    console.log(data);
-})
+const landing = () => {
+  const accessToken = sessionStorage.getItem("Authorization")
+  const refreshToken = sessionStorage.getItem("RefreshToken")
+
+  if (!accessToken || !refreshToken ) {
+    window.location.href = '/login';
+  }
+  else {
+    window.location.href = '/player'
+  }
+}

@@ -64,11 +64,11 @@ td {
   font-weight: bold;
 }
 
-.fas {
-  margin-top: 0.3rem;
+.fa {
+  margin: 0.3rem;
 }
 
-.fas:hover {
+.fa:hover {
   color: #504d4d;
 }
 

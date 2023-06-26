@@ -3,7 +3,11 @@ const {
   registerService,
 } = require('./register.service');
 
-registerRouter.post('', (req, res) => {
+const {
+  auth
+} = require('../../middleware/authValidation');
+
+registerRouter.post('', auth, (req, res) => {
   res.status(200).json({})
 });
 
