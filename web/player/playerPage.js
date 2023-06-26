@@ -1,6 +1,10 @@
 let data;
-const accessToken = sessionStorage.getItem("Authorization")
-const refreshToken = sessionStorage.getItem("RefreshToken")
+const accessToken = sessionStorage.getItem("Authorization");
+const refreshToken = sessionStorage.getItem("RefreshToken");
+
+if(accessToken == null && refreshToken == null){
+  window.location.replace("/login");
+}
 
 document.addEventListener('DOMContentLoaded', async () => {
   try {
