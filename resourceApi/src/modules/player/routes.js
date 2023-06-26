@@ -12,7 +12,7 @@ playerRouter.post('', auth, (req, res) => {
 });
 
 playerRouter.get('/getScore', auth, async (req, res) => {
-  let name = res.locals.user.name;
+  let name = res.locals.user.username;
   return playerService.fetchUserScore(name)
     .then(data => {
       return res.status(200).json(data);
