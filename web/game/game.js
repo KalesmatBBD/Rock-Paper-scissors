@@ -4,6 +4,9 @@ const computerScoreElement = document.getElementById('computer-score');
 const timerElement = document.getElementById('timer');
 const resultElement = document.getElementById('result');
 
+const accessToken = sessionStorage.getItem("Authorization")
+const refreshToken = sessionStorage.getItem("RefreshToken")
+
 let playerScore = 0;
 let computerScore = 0;
 let round = 0;
@@ -112,12 +115,12 @@ function endGame() {
     resultElement.textContent = "Oops! You lost the game.";
     submitScore('player1', 'loss');
   } else {
-    resultElement.textContent = "It's a tie!";
-  }
-  if (timer !== null) {
-    clearTimeout(timer);
-    timer = null;
-    resultElement.textContent = "Oops! You lost the game.";
+    if (timer !== null) {
+      clearTimeout(timer);
+      timer = null;
+      resultElement.textContent = "Oops! You lost the game.";
+      submitScore('player1', 'loss');
+    }
   }
 }
 
@@ -136,13 +139,18 @@ function resetGame() {
   timer = startTimer(15);
 }
 
+ const replayButton = document.getElementById('replay-button');
+  replayButton.addEventListener('click', resetGame);
+
 const submitScore= (username,state) => {
   fetch('http://localhost:4040/api/scores/postScore', {
       method: 'POST',
       mode: "cors",
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'AccessToken': accessToken,
+        'RefreshToken': refreshToken,
       },
       body: JSON.stringify({username,state})
   })
@@ -154,4 +162,3 @@ const submitScore= (username,state) => {
   });
 }
 
-resetGame();
