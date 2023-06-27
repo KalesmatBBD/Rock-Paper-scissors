@@ -1,6 +1,5 @@
 const axios = require("axios");
 const config = require("config");
-const identityProviderUrl = config.resourceApi.identityProviderUrl;
 const {
     tokenService
 } = require('../modules/shared/services');
@@ -9,7 +8,7 @@ const audience = 'RPS_API';
 const issuer = 'RPS_ID';
 
 const getNewAccessToken = async (accessToken, refreshToken) => {
-    const response = await axios.get(`${identityProviderUrl}/token`, {
+    const response = await axios.get(`http://localhost:8080/token`, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',

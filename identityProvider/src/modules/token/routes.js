@@ -5,7 +5,6 @@ const {
 
 tokenRouter.get('', (req, res) => {
   const { accesstoken, refreshtoken } = req.headers
-  console.log('You made it');
   return tokenAuthService.getNewAccessToken(refreshtoken, accesstoken)
     .then(({accessToken, refreshToken}) => {
       res.set('AccessToken', accessToken)

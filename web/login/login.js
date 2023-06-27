@@ -91,7 +91,6 @@ const cancelButtonEventListener = (button) => {
 
 const registerButtonEventListener = (button) => {
     button.addEventListener('click', (e) => {
-        console.log('yaya');
         window.location.href = '/register';
     })
 }

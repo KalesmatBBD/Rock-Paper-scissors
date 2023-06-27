@@ -54,10 +54,9 @@ async function postScore(username, state) {
     const response = await request.query(query);
     sql.close();
 
-    return response;
-  } catch (error) {
-    console.log("Original Error:", error);
-    throw error;
+      return response;
+    } catch (error) {
+      throw error;
   }
 }
 
