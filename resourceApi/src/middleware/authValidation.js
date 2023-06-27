@@ -12,6 +12,7 @@ const getNewAccessToken = async (accessToken, refreshToken) => {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin':'*',
             accesstoken: accessToken,
             refreshtoken: refreshToken
         }

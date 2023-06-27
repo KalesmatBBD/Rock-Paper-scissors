@@ -33,9 +33,11 @@ const submitSignIn = (registration) => {
     responseErrorMessage('', error)
     fetch('https://d3vbn0ixkks4al.cloudfront.net/register', {
         method: 'POST',
+        mode: 'cors',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin':'*',
         },
         body: JSON.stringify(registration)
     })

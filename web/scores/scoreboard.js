@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         Accept: "application/json",
         AccessToken: accessToken,
         RefreshToken: refreshToken,
+        'Access-Control-Allow-Origin':'*',
       },
     });
     data = await result.json();
