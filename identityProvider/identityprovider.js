@@ -14,7 +14,13 @@ const app = express();
 const identityProviderConfig = config.identityProvider;
 const port = identityProviderConfig.port;
 
-app.use(cors())
+// app.use(cors())
+app.use(cors({
+  credentials: true,
+  origin: '*',
+  methods: ['GET', 'POST', 'PUT']
+}))
+
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.json());
 
