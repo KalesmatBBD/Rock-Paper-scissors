@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       mode: "cors",
       headers: {
         Accept: "application/json",
+        "Access-Control-Expose-Headers":"AccessToken, RefreshToken",
         AccessToken: accessToken,
         RefreshToken: refreshToken,
         'Access-Control-Allow-Origin':'*',

@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin':'*',
+        "Access-Control-Expose-Headers":"AccessToken, RefreshToken",
         'AccessToken': accessToken,
         'RefreshToken': refreshToken,
       }
