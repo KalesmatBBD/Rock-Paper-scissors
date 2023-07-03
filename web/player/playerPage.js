@@ -23,10 +23,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     data = await result.json();
   } catch (error) {
+    window.location.replace("/login");
   }
   
-  document.getElementById("name").innerHTML = data[0].username;
-  document.getElementById("wins").innerHTML = data[0].wins;
-  document.getElementById("losses").innerHTML = data[0].losses;
+  document.getElementById("name").innerText = data[0].username;
+  document.getElementById("wins").innerText = data[0].wins;
+  document.getElementById("losses").innerText = data[0].losses;
 
 });
